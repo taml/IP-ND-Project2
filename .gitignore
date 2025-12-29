@@ -1,0 +1,7 @@
+# Virtual Env
+.venv
+.venv/*
+
+# Workspace
+.idea
+.idea/*
