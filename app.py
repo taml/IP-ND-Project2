@@ -3,12 +3,13 @@ import os
 import requests
 from flask import Flask, render_template, abort, request
 from QuoteEngine import TextIngestor
+from MemeGenerator import MemeEngine
 
 # @TODO Import your Ingestor and MemeEngine classes
 
 app = Flask(__name__)
 
-#meme = MemeEngine('./static')
+meme = MemeEngine('./static')
 
 
 def setup():
@@ -33,7 +34,10 @@ def setup():
 
     # TODO: Use the pythons standard library os class to find all
     # images within the images images_path directory
-    imgs = None
+    imgs = []
+    for (root, dirs, files) in os.walk(images_path):
+        for file in files:
+            imgs.append(os.path.join(images_path, file))
 
     return quotes, imgs
 
@@ -50,9 +54,14 @@ def meme_rand():
     # Use the random python standard library class to:
     # 1. select a random image from imgs array
     # 2. select a random quote from the quotes array
-
     img = None
+    if len(imgs) > 0:
+        img = random.choice(imgs)
+
     quote = None
+    if len(quotes) > 0:
+        quote = random.choice(quotes)
+
     path = meme.make_meme(img, quote.body, quote.author)
     return render_template('meme.html', path=path)
 
