@@ -1,7 +1,7 @@
 import os
 
-from .Meme import Meme
 from PIL import Image, ImageDraw, ImageFont
+import PIL
 import random
 
 # Loading of a file from disk
@@ -15,6 +15,9 @@ class MemeEngine:
             os.makedirs(output_dir)
 
     def make_meme(self, img_path, text, author, width=500) -> str:
+        if width > 500 or width <= 0:
+            raise Exception('Width must be greater than 0 and less than or equal to 500')
+
         try:
             img = Image.open(img_path)
 
@@ -32,5 +35,7 @@ class MemeEngine:
             out_path = os.path.join(self.output_dir, f"{random.randint(0, 100000)}-meme.png")
             img.save(out_path)
             return out_path
+        except PIL.UnidentifiedImageError:
+            return ''
         except FileNotFoundError:
             return ''

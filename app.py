@@ -82,8 +82,19 @@ def meme_post():
     # 2. Use the meme object to generate a meme using this temp
     #    file and the body and author form paramaters.
     # 3. Remove the temporary saved image.
+    image_url = request.form['image_url']
+    body = request.form['body']
+    author = request.form['author']
 
-    path = None
+    req = requests.get(image_url, stream=True)
+
+    tmp = f'./tmp_{random.randint(0, 10000000000)}.jpg'
+    with open(tmp, 'wb') as img:
+        img.write(req.content)
+
+    path = meme.make_meme(tmp, body, author)
+
+    os.remove(tmp)
 
     return render_template('meme.html', path=path)
 
