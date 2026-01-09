@@ -36,8 +36,7 @@ def setup():
     # images within the images images_path directory
     imgs = []
     for (root, dirs, files) in os.walk(images_path):
-        for file in files:
-            imgs.append(os.path.join(images_path, file))
+        imgs = [os.path.join(root, name) for name in files]
 
     return quotes, imgs
 
