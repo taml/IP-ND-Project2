@@ -47,7 +47,6 @@ def meme_rand():
     """ Generate a random meme
     :return: render_template: - template including HTML and path to random meme
     """
-
     img = None
     if len(imgs) > 0:
         img = random.choice(imgs)
@@ -77,15 +76,29 @@ def meme_post():
     body = request.form['body']
     author = request.form['author']
 
-    req = requests.get(image_url, stream=True)
+    if not all([image_url, body, author]):
+        abort(400, description="Image URL, quote body, and "
+                               "quote author are required.")
+
+    try:
+        req = requests.get(image_url, stream=True)
+    except requests.exceptions.RequestException:
+        abort(400, description="Failed to fetch image")
 
     tmp = f'./tmp_{random.randint(0, 10000000000)}.jpg'
-    with open(tmp, 'wb') as img:
-        img.write(req.content)
 
-    path = meme.make_meme(tmp, body, author)
+    try:
+        with open(tmp, 'wb') as img:
+            img.write(req.content)
 
-    os.remove(tmp)
+            path = meme.make_meme(tmp, body, author)
+
+            if not path:
+                abort(500, description="Failed to generate meme.")
+
+    finally:
+        if os.path.exists(tmp):
+            os.remove(tmp)
 
     return render_template('meme.html', path=path)
 
