@@ -7,11 +7,18 @@ from .IngestorInterface import IngestorInterface
 from .QuoteModel import QuoteModel
 
 
+""" PDF Importer class, inherits from IngestorInterface """
+
+
 class PDFImporter(IngestorInterface):
     allowed_extensions = ['pdf']
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
+        """ Class method to import and parse a PDF file
+        :param path: string - Path to PDF file
+        :return quotes: QuoteModel[] - An array of QuoteModel objects
+        """
         if not cls.can_ingest(path):
             raise Exception('Cannot ingest exception')
 
@@ -30,4 +37,3 @@ class PDFImporter(IngestorInterface):
         file_ref.close()
         os.remove(tmp)
         return quotes
-

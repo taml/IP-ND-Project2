@@ -1,15 +1,22 @@
-
 from typing import List
 import docx
 
 from .IngestorInterface import IngestorInterface
 from .QuoteModel import QuoteModel
 
+
+""" Docx Importer class, inherits from IngestorInterface """
+
+
 class DocxImporter(IngestorInterface):
     allowed_extensions = ['docx']
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
+        """ Class method to import and parse a Docx file
+        :param path: string - Path to Docx file
+        :return quotes: QuoteModel[] - An array of QuoteModel objects
+        """
         if not cls.can_ingest(path):
             raise Exception('cannot ingest exception')
 
