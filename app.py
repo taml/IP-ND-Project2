@@ -35,7 +35,6 @@ def setup():
 
 
 quotes, imgs = setup()
-print(quotes)
 
 
 @app.route('/')
