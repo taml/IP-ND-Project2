@@ -17,7 +17,10 @@ class TXTImporter(IngestorInterface):
         :return quotes: QuoteModel[] - An array of QuoteModel objects
         """
         if not cls.can_ingest(path):
-            raise Exception('Cannot ingest exception')
+            raise Exception(
+                f'Cannot ingest {path}, please ensure that the path is '
+                f'correct and the file type is TXT.'
+            )
 
         quotes = []
 

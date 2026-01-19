@@ -17,7 +17,10 @@ class CSVImporter(IngestorInterface):
         :return quotes: QuoteModel[] - An array of QuoteModel objects
         """
         if not cls.can_ingest(path):
-            raise Exception('cannot ingest exception')
+            raise Exception(
+                f'Cannot ingest {path}, please ensure that the path is '
+                f'correct and the file type is CSV.'
+            )
 
         quotes = []
         df = pandas.read_csv(path, header=0)
